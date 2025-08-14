@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class hashFunctionExample {
+public class hashFunction {
     // Basic hash function using modulo
     public static int computeHash(String input, int hashSize) {
         int hash = 0;
@@ -24,4 +24,5 @@ public class hashFunctionExample {
         int hashValue = computeHash(input, hashSize);
         System.out.println("Hash value: " + hashValue);
     }
+
 }
