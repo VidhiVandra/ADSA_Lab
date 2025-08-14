@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+public class BST {
+   
+    static class Node {
+        int data;
+        Node left, right;
+
+        Node(int value) {
+            data = value;
+            left = right = null;
+        }
+    }
+
+   
+    static Node insert(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
+        }
+        if (value < root.data) {
+            root.left = insert(root.left, value);
+        } else if (value > root.data) {
+            root.right = insert(root.right, value);
+        }
+      
+        return root;
+    }
+
+   
+    static void preorder(Node root) {
+        if (root == null) return;
+        System.out.print(root.data + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+
+   
+    static void inorder(Node root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.data + " ");
+        inorder(root.right);
+    }
+
+   
+    static void postorder(Node root) {
+        if (root == null) return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.data + " ");
+    }
+
+    
+    static Node search(Node root, int key) {
+        if (root == null || root.data == key) {
+            return root;
+        }
+        if (key < root.data) {
+            return search(root.left, key);
+        } else {
+            return search(root.right, key);
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Node root = null;
+
+        System.out.print("Enter number of nodes: ");
+        int n = sc.nextInt();
+
+        System.out.print("Enter " + n + " values: ");
+        for (int i = 0; i < n; i++) {
+            int value = sc.nextInt();
+            root = insert(root, value);
+        }
+
+        System.out.print("\nPreorder: ");
+        preorder(root);
+
+        System.out.print("\nInorder: ");
+        inorder(root);
+
+        System.out.print("\nPostorder: ");
+        postorder(root);
+
+        System.out.print("\n\nEnter value to search: ");
+        int key = sc.nextInt();
+
+        if (search(root, key) != null) {
+            System.out.println(" right Value " + key + " found in the BST.");
+        } else {
+            System.out.println(" wrong Value " + key + " not found in the BST.");
+        }
+
+        sc.close();
+    }
+}
