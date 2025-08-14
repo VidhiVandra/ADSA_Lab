@@ -1,0 +1,104 @@
+import java.util.Scanner;
+
+public class BST {
+  
+    static class Node {
+        int data;
+        Node left, right;
+
+        Node(int value) {
+            data = value;
+            left = right = null;
+        }
+    }
+
+    
+    static Node insert(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
+        }
+        if (value < root.data) {
+            root.left = insert(root.left, value);
+        } else {
+            root.right = insert(root.right, value);
+        }
+        return root;
+    }
+
+   
+    static void preorder(Node root) {
+        if (root != null) {
+            System.out.print(root.data + " ");
+            preorder(root.left);
+            preorder(root.right);
+        }
+    }
+
+   
+    static void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+
+   
+    static void postorder(Node root) {
+        if (root != null) {
+            postorder(root.left);
+            postorder(root.right);
+            System.out.print(root.data + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Node root = null;
+
+        System.out.print("How many nodes do you want to insert= ");
+        int n = sc.nextInt();
+
+        for (int i = 1; i <= n; i++) {
+            System.out.print("Enter value " + i + ": ");
+            int value = sc.nextInt();
+            root = insert(root, value);
+        }
+
+        int choice;
+        do {
+            System.out.println("\nTraversal Menu:");
+            System.out.println("1. Preorder");
+            System.out.println("2. Inorder");
+            System.out.println("3. Postorder");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Preorder Traversal: ");
+                    preorder(root);
+                    System.out.println();
+                    break;
+                case 2:
+                    System.out.print("Inorder Traversal: ");
+                    inorder(root);
+                    System.out.println();
+                    break;
+                case 3:
+                    System.out.print("Postorder Traversal: ");
+                    postorder(root);
+                    System.out.println();
+                    break;
+                case 4:
+                    System.out.println("Exiting program.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != 4);
+
+        sc.close();
+    }
+}
