@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+public class Dijkstra {
+
+    static final int MAX = 50;
+    static final int INF = Integer.MAX_VALUE;
+
+    // Function to find the vertex with the minimum distance
+    static int findMinDist(int[] dist, boolean[] visited, int numVertices) {
+        int min = INF;
+        int minIndex = -1;
+
+        for (int v = 0; v < numVertices; v++) {
+            if (!visited[v] && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+
+    // Function to print the path from source to a vertex
+    static void printPath(int[] parent, int v) {
+        if (parent[v] == -1) {
+            System.out.print(v);
+            return;
+        }
+        printPath(parent, parent[v]);
+        System.out.print(" -> " + v);
+    }
+
+    // Function that implements Dijkstra's Algorithm
+    static void dijkstra(int[][] graph, int src, int numVertices) {
+        int[] dist = new int[numVertices];
+        boolean[] visited = new boolean[numVertices];
+        int[] parent = new int[numVertices];
+
+        // Initialize arrays
+        for (int i = 0; i < numVertices; i++) {
+            dist[i] = INF;
+            visited[i] = false;
+            parent[i] = -1;
+        }
+
+        dist[src] = 0; // Distance from source to itself is 0
+
+        for (int count = 0; count < numVertices - 1; count++) {
+            int u = findMinDist(dist, visited, numVertices);
+            if (u == -1) break;  // No reachable vertex left
+            visited[u] = true;
+
+            for (int v = 0; v < numVertices; v++) {
+                if (!visited[v] && graph[u][v] != 0 && dist[u] != INF
+                        && dist[u] + graph[u][v] < dist[v]) {
+                    dist[v] = dist[u] + graph[u][v];
+                    parent[v] = u;
+                }
+            }
+        }
+
+        // Print results
+        System.out.println("\nVertex   Distance   Path");
+        for (int i = 0; i < numVertices; i++) {
+            System.out.print(i + " \t ");
+            if (dist[i] == INF) {
+                System.out.print("-1 \t No Path");
+            } else {
+                System.out.print(dist[i] + " \t ");
+                printPath(parent, i);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int numVertices;
+        int[][] graph = new int[MAX][MAX];
+
+        System.out.print("Enter number of vertices: ");
+        numVertices = sc.nextInt();
+
+        System.out.printf("Enter adjacency matrix (%dx%d):\n", numVertices, numVertices);
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.print("Enter source vertex: ");
+        int src = sc.nextInt();
+
+        dijkstra(graph, src, numVertices);
+
+        sc.close();
+    }
+}
