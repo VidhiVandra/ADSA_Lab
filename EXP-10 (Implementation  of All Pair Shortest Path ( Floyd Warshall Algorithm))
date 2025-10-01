@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+public class FloydWarshall {
+
+    static final int INF = 99999;
+    static final int MAX = 50;
+    static int[][] dist = new int[MAX][MAX];
+    static int[][] next = new int[MAX][MAX];
+
+    // Function to print the path from u to v
+    static void printPath(int u, int v) {
+        if (next[u][v] == -1) {
+            System.out.print("No path");
+            return;
+        }
+        System.out.print(u);
+        while (u != v) {
+            u = next[u][v];
+            System.out.print(" -> " + u);
+        }
+    }
+
+    // Function to implement Floyd-Warshall Algorithm
+    static void floydWarshall(int[][] graph, int n) {
+        // Initialize distance and next matrices
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dist[i][j] = graph[i][j];
+                if (graph[i][j] != INF && i != j) {
+                    next[i][j] = j;
+                } else {
+                    next[i][j] = -1;
+                }
+            }
+        }
+
+        // Floyd-Warshall main algorithm
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        next[i][j] = next[i][k];
+                    }
+                }
+            }
+        }
+
+        // Print distance matrix
+        System.out.println("\nAll Pairs Shortest Path Matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (dist[i][j] == INF)
+                    System.out.printf("%7s", "INF");
+                else
+                    System.out.printf("%7d", dist[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n;
+        int[][] graph = new int[MAX][MAX];
+
+        System.out.print("Enter number of vertices: ");
+        n = sc.nextInt();
+
+        System.out.printf("Enter adjacency matrix (%dx%d) (use 0 for no edge):\n", n, n);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                graph[i][j] = sc.nextInt();
+                if (i != j && graph[i][j] == 0) {
+                    graph[i][j] = INF; // No edge
+                }
+            }
+        }
+
+        floydWarshall(graph, n);
+
+        System.out.print("\nEnter two vertices to find shortest path (u v): ");
+        int u = sc.nextInt();
+        int v = sc.nextInt();
+
+        if (dist[u][v] == INF) {
+            System.out.printf("No path exists between %d and %d\n", u, v);
+        } else {
+            System.out.printf("Shortest distance from %d to %d = %d\n", u, v, dist[u][v]);
+            System.out.print("Path: ");
+            printPath(u, v);
+            System.out.println();
+        }
+
+        sc.close();
+    }
+}
