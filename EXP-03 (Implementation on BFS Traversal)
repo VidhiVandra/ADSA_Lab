@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class BFSGraph {
+    static final int MAX = 100;
+    static int[][] graph = new int[MAX][MAX];
+    static boolean[] visited = new boolean[MAX];
+    static Queue<Integer> queue = new LinkedList<>();
+
+   
+    public static void BFS(int vertices, int start) {
+
+        Arrays.fill(visited, 0, vertices, false);
+
+        
+        queue.add(start);
+        visited[start] = true;
+
+        System.out.print("BFS Traversal: ");
+
+        while (!queue.isEmpty()) {
+            int current = queue.remove();
+            System.out.print(current + " ");
+
+            for (int i = 0; i < vertices; i++) {
+                if (graph[current][i] == 1 && !visited[i]) {
+                    queue.add(i);
+                    visited[i] = true;
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
+  
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of vertices in the graph: ");
+        int vertices = sc.nextInt();
+
+        System.out.println("Enter adjacency matrix:");
+        for (int i = 0; i < vertices; i++) {
+            for (int j = 0; j < vertices; j++) {
+                graph[i][j] = sc.nextInt();
+            }
+        }
+
+        System.out.print("Enter starting vertex for BFS (0 to " + (vertices - 1) + "): ");
+        int start = sc.nextInt();
+
+        BFS(vertices, start);
+
+        sc.close();
+    }
+}
