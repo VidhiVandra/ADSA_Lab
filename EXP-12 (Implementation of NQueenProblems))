@@ -1,0 +1,69 @@
+import java.util.Scanner;
+
+public class NQueenProblem {
+
+    static int N;
+    static int[][] board;
+
+    // Check if a queen can be placed at board[row][col]
+    static boolean isSafe(int row, int col) {
+        // Check column
+        for (int i = 0; i < row; i++)
+            if (board[i][col] == 1)
+                return false;
+
+        // Check upper-left diagonal
+        for (int i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--)
+            if (board[i][j] == 1)
+                return false;
+
+        // Check upper-right diagonal
+        for (int i = row - 1, j = col + 1; i >= 0 && j < N; i--, j++)
+            if (board[i][j] == 1)
+                return false;
+
+        return true;
+    }
+
+    // Recursive function to solve the N-Queen problem
+    static boolean solveNQueen(int row) {
+        if (row == N) // All queens placed
+            return true;
+
+        for (int col = 0; col < N; col++) {
+            if (isSafe(row, col)) {
+                board[row][col] = 1; // place queen
+                if (solveNQueen(row + 1))
+                    return true;
+                board[row][col] = 0; // backtrack
+            }
+        }
+        return false;
+    }
+
+    // Print the board (solution)
+    static void printBoard() {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++)
+                System.out.print((board[i][j] == 1 ? "Q " : ". "));
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of queens (N): ");
+        N = sc.nextInt();
+        board = new int[N][N];
+
+        if (!solveNQueen(0))
+            System.out.println("No solution exists for " + N + " queens.");
+        else {
+            System.out.println("One possible solution:");
+            printBoard();
+        }
+
+        sc.close();
+    }
+}
