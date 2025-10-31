@@ -1,0 +1,55 @@
+
+import java.util.Scanner;
+
+public class MRTCalculation {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Number of Array: ");
+        int n = sc.nextInt();
+
+        if (n <= 0) {
+            System.out.println("Invalid number!");
+            sc.close();
+            return;
+        }
+
+        int[] arr = new int[n];
+        System.out.println("Enter Array lengths:");
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+
+        // Simple Bubble Sort
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int tmp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = tmp;
+                }
+            }
+        }
+
+        System.out.print("Optimal storage order: ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+
+      
+        long cumulative = 0, total = 0;
+        for (int i = 0; i < n; i++) {
+            cumulative += arr[i];
+            total += cumulative;
+        }
+
+        double mrt = (double) total / n;
+
+        System.out.printf("Minimum Retrieval Time (MRT): %.2f\n", mrt);
+
+        sc.close();
+    }
+}
+
